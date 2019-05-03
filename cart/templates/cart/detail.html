@@ -1,0 +1,65 @@
+{% extends 'machine/base.html' %}
+
+{% load static %}
+{% block title %} Your shopping Cart {% endblock %}
+
+{% block body %}
+{% load i18n %}
+
+
+<div class="container">
+    <h1 style="margin-top:10px">{% trans 'Your cart' %}</h1>
+    <hr>
+    <table class=" table table-bordered">
+        <thead>
+            <tr>
+                <th>{% trans 'Image' %}</th>
+                <th>{% trans 'Product' %}</th>
+                <th>{% trans 'Quantity' %}</th>
+                <th>{% trans 'Remove' %}</th>
+                <th>{% trans 'Unit price' %}</th>
+                <th>{% trans 'Price' %}</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in cart %}
+            {% with product=item.product %}
+            <tr>
+                <td>
+                    <a href="{{ product.get_absolute_url }}">
+                        <img src="{{ product.image.url }}" height="300" width="300">
+                    </a>
+                </td>
+                <td>{{ product.name }}</td>
+                <td>
+                    <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                        {{ item.update_quantity_form.quantity }}
+                        {{ item.update_quantity_form.update }}
+                        <input type="submit" value="{% trans 'Update' %}">
+                        {% csrf_token %}
+                    </form>
+                </td>
+                <td><a href="{% url 'cart:cart_remove' product.id %}">{% trans 'Remove' %}</a></td>
+                <td class="num">Ksh {{ item.price }}</td>
+                <td class="num">Ksh {{ item.total_price }}</td>
+            </tr>
+            {% endwith %}
+        {% endfor %}
+        <tr class="total">
+            <td>Total</td>
+            <td colspan="4"></td>
+            <td class="num">Ksh {{ cart.get_total_price }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <p class="text-right">
+        <a href="{% url 'machine:product_list' %}" class="btn btn-primary">{% trans 'Continue shopping' %}</a>
+        {% if cart|length < 1 %}
+            <a href="{% url 'machine:product_list' %}" class="button">{% trans 'Go home' %}</a>
+        {% else %}
+            <a href="{% url 'request:create_order' %}" class="btn btn-success">{% trans 'Checkout' %}</a>
+        {% endif %}
+    </p>
+</div>
+
+{%endblock %}

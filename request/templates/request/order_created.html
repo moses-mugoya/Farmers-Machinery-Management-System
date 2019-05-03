@@ -1,0 +1,15 @@
+{% extends 'machine/base.html' %}
+
+{% block title %}
+    Thank you
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    {% load i18n%}
+    <h1>{% trans 'Thank you'%} {{request.user.username}}!</h1>
+    <hr>
+    <p class="para">{% trans 'Your request has been received. Your request number is' %} <strong>{{ order.id }}</strong>.</p>
+    <p class="para">{% trans 'Please wait while we process your request. Once we are done, we will update the status of your request in your account' %}</p>
+</div>
+{% endblock %}

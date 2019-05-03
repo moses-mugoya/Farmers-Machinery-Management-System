@@ -1,0 +1,33 @@
+{% extends 'machine/base.html' %}
+
+{% block title %} Dashboard {% endblock %}
+
+{% block body %}
+<div class="container" xmlns="http://www.w3.org/1999/html">
+    {% load i18n %}
+    <div class="col-md-7">
+        <h1>{% trans 'Dashboard' %}</h1>
+        <hr>
+        <p class="para">Welcome to your dashboard. You can <a href="{% url 'account:edit' %}">
+            edit your account</a> or <a href="{% url 'password_change' %}">change your password .</a>
+        </p>
+    </div>
+    <div class="col-md-12">
+        <h1>My Requests</h1>
+        <hr>
+        {% for request in requests %}
+        <h4>Request Id: {{request.id}}</h4>
+        {% if request.approved %}
+        <p>Status: <span  style="color:green">Approved</span></p>
+        <p>Your request has been approved. You will receive your machinery at the address you gave upon payment in 3 days time</p>
+        {% else %}
+        <p>Please be patient as we process your request</p>
+        <p>Status: <span style="color:red">Pending Approval</span></p>
+        {% endif %}
+        {% empty %}
+        <p style="font-style:italic">You haven't made any requests at the moment</p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
